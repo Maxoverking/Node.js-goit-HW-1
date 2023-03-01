@@ -1,17 +1,70 @@
-// const contactsPath = ;
+const { nanoid } = require("nanoid");
+const fs = require("fs").promises;
+const path = require("path");
 
-function listContacts() {
-  // ...твой код
-}
+//получаем полный путь к файлу
+const contactsPath = path.join(__dirname, "/db", "contacts.json");
 
-function getContactById(contactId) {
-  // ...твой код
-}
+const listContacts = async () => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    return (obj = JSON.parse(data));
+  } catch (error) {
+    console.log("🚀  error:", error);
+  }
+};
 
-function removeContact(contactId) {
-  // ...твой код
-}
+const getContactById = async (contactId) => {
+  try {
+    const data = await listContacts();
+    const contact = data.filter(({ id }) => id === contactId);
+    return contact;
+  } catch (error) {
+    console.log("🚀  error:", error);
+  }
+};
 
-function addContact(name, email, phone) {
-  // ...твой код
-}
+const removeContact = async (contactId) => {
+  try {
+    const data = await listContacts();
+    const newContactsArray = data.filter(({ id }) => id !== contactId);
+    const convertToString = JSON.stringify(newContactsArray);
+    await fs.writeFile(contactsPath, convertToString, "utf-8");
+    return newContactsArray;
+  } catch (error) {
+    console.log("🚀  error:", error);
+  }
+};
+
+const addContact = async (name, email, phone) => {
+  try {
+    const data = await listContacts();
+    const newContact = { id: nanoid(), name, email, phone };
+    const addNewContact = [...data, newContact];
+    const convertToString = JSON.stringify(addNewContact);
+    await fs.writeFile(contactsPath, convertToString, "utf-8");
+  } catch (error) {
+    console.log("🚀  error:", error);
+  }
+};
+
+listContacts();
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+};
+
+// async function listContacts() {
+//   try {
+//     const data = await fs.readFile(contactsPath, "utf-8");
+//     const obj = JSON.parse(data);
+
+//     console.log("🚀  obj:", obj);
+//     return obj;
+//   } catch (error) {
+//     console.log("🚀  error:", error);
+//   }
+// }
