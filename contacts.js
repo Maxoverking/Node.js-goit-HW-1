@@ -41,6 +41,8 @@ const addContact = async (name, email, phone) => {
     const data = await listContacts();
     const newContact = { id: nanoid(), name, email, phone };
     const addNewContact = [...data, newContact];
+
+    console.log("🚀  newContact:", newContact);
     const convertToString = JSON.stringify(addNewContact);
     await fs.writeFile(contactsPath, convertToString, "utf-8");
   } catch (error) {

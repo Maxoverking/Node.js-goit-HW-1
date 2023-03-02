@@ -18,8 +18,6 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
-console.log("🚀  argv:", argv);
-
 const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
     case "list":
@@ -32,7 +30,7 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
       break;
     case "add":
       const addContacts = await addContact(name, email, phone);
-      console.table(addContacts);
+      // console.table(addContacts);
       break;
     case "remove":
       const removeContacts = await removeContact(id);
